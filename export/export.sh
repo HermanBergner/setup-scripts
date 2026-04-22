@@ -86,6 +86,11 @@ set -euo pipefail
 
 log() { echo "[install-packages] \$*"; }
 
+sync_pacman_db() {
+  log "Syncing pacman package databases..."
+  sudo pacman -Sy
+}
+
 install_yay() {
   if command -v yay &>/dev/null; then
     log "yay already installed, skipping."
@@ -138,6 +143,7 @@ AUR_EMPTY
     fi
 
     cat <<'FOOTER'
+sync_pacman_db
 install_yay
 install_pacman_packages
 install_aur_packages
