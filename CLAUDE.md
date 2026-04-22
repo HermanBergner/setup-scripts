@@ -79,10 +79,12 @@ wsl-setup/
 **What it does:**
 1. Installs `yay` (AUR helper) if not present
 2. Runs `scripts/install-packages.sh` to install all packages from the manifest
-3. Clones the dotfiles repo
-4. Symlinks zsh config (`.zshrc`) into `$HOME`
-5. Symlinks nvim config into `$HOME/.config/nvim`
-6. Sets zsh as the default shell (`chsh`)
+3. Clones the dotfiles repo to `~/dotfiles`
+4. Symlinks `~/dotfiles/zsh/.zshrc` → `~/.zshrc`
+5. Symlinks `~/dotfiles/zsh/config` → `~/.config/zsh`
+6. Clones zsh plugins (fzf-tab, zsh-syntax-highlighting, zsh-autosuggestions) into `~/.config/zsh/plugins/`
+7. Symlinks `~/dotfiles/nvim` → `~/.config/nvim`
+8. Sets zsh as the default shell via `sudo usermod -s`
 
 **Idempotent:** Running setup more than once must be safe — check before creating symlinks, installing packages, etc.
 
@@ -94,11 +96,13 @@ Configs for `zsh` and `nvim` live in a single dotfiles git repo cloned to `~/dot
 
 **zsh:**
 - No oh-my-zsh
-- Custom `.zshrc` at `dotfiles/zsh/.zshrc`, symlinked to `~/.zshrc`
+- `.zshrc` at `dotfiles/zsh/.zshrc`, symlinked to `~/.zshrc`
+- Modular config files in `dotfiles/zsh/config/`, symlinked to `~/.config/zsh/`
+- Plugins (fzf-tab, zsh-syntax-highlighting, zsh-autosuggestions) cloned at setup time into `~/.config/zsh/plugins/`
 
 **nvim:**
 - Config at `~/.config/nvim/` (symlinked from `dotfiles/nvim/`)
-- Entry point: `init.lua`
+- Entry point: `init.lua`; uses `lazy.nvim`
 
 See `docs/feature_003_dotfiles/` for details.
 
