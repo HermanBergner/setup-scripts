@@ -1,6 +1,20 @@
 # CLAUDE.md — WSL Setup Script
 
-This file is the source of truth for this project. It must be kept up to date whenever code, structure, or behaviour changes. All documentation lives in `docs/` and must also be updated in sync.
+This file is the source of truth for this project.
+
+## Maintenance Rules — Read Before Making Any Change
+
+These rules are non-negotiable and apply to every change, no matter how small:
+
+1. **Code change = doc change.** Any modification to a script, function, flag, path, or behaviour must be reflected in the relevant `docs/feature_<id>/README.md` **and** in this file in the same commit. No exceptions. A code change without a matching doc update is incomplete.
+
+2. **This file must always describe the current state of the code** — not what was planned, not what it used to do. If something in this file no longer matches the code, update this file immediately.
+
+3. **Docs describe behaviour, not intent.** Write what the code actually does, not what it should do. If the implementation differs from the original plan, the docs follow the implementation.
+
+4. **New function or step added to a script?** Update the "What it does" list in the corresponding feature doc and in this file's phase description.
+
+5. **Anything removed or renamed?** Remove or rename it everywhere — feature doc, this file, the project structure diagram, and the decisions table if applicable.
 
 ---
 
@@ -116,7 +130,7 @@ See `docs/feature_003_dotfiles/` for details.
   - What the feature does
   - How to use it
   - Any decisions or tradeoffs made
-- **When anything changes in the project** — code, structure, decisions — the relevant `docs/` page AND this `CLAUDE.md` must be updated in the same commit/PR. No exceptions.
+- **Code changes and doc updates ship in the same commit.** Never merge a code change without updating the relevant `docs/` page and this file.
 
 ### Current docs
 
