@@ -152,7 +152,7 @@ set_default_shell() {
     return
   fi
 
-  chsh -s "$zsh_path"
+  sudo usermod -s "$zsh_path" "$USER"
   log "Default shell changed to $zsh_path. Re-login to take effect."
 }
 
