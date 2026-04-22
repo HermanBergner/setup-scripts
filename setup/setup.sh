@@ -3,7 +3,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(dirname "$SCRIPT_DIR")"
-DOTFILES_REPO="${DOTFILES_REPO:-}"
+DOTFILES_REPO="${DOTFILES_REPO:-https://github.com/HermanBergner/dotfiles}"
 DOTFILES_DIR="$HOME/dotfiles"
 INSTALL_SCRIPT="$REPO_ROOT/scripts/install-packages.sh"
 
@@ -15,13 +15,6 @@ check_deps() {
   done
 }
 
-require_dotfiles_repo() {
-  if [[ -z "$DOTFILES_REPO" ]]; then
-    log "DOTFILES_REPO env var is not set. Export it before running setup."
-    log "  Example: export DOTFILES_REPO=\"https://github.com/youruser/dotfiles\""
-    exit 1
-  fi
-}
 
 install_yay() {
   if command -v yay &>/dev/null; then
@@ -169,7 +162,6 @@ main() {
     exit 1
   fi
 
-  require_dotfiles_repo
   check_deps
   install_yay
   install_packages
