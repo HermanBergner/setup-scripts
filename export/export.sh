@@ -49,13 +49,20 @@ generate_install_script() {
   timestamp="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
   local out="$SCRIPTS_DIR/install-packages.sh"
 
-  # Build the pacman package list as indented lines for the script
+  # Exclude AUR packages from the pacman list (both are sorted, comm -23 gives pacman-only)
+  local pacman_only
+  if [[ -n "$aur_pkgs" ]]; then
+    pacman_only="$(comm -23 <(echo "$pacman_pkgs") <(echo "$aur_pkgs"))"
+  else
+    pacman_only="$pacman_pkgs"
+  fi
+
+  # Build indented package lines for the generated script
   local pacman_lines=""
   while IFS= read -r pkg; do
     [[ -z "$pkg" ]] && continue
     pacman_lines+="    $pkg \\"$'\n'
-  done <<< "$pacman_pkgs"
-  # Strip trailing backslash-newline from last entry
+  done <<< "$pacman_only"
   pacman_lines="${pacman_lines%\\$'\n'}"
 
   local aur_lines=""
@@ -65,7 +72,6 @@ generate_install_script() {
   done <<< "$aur_pkgs"
   aur_lines="${aur_lines%\\$'\n'}"
 
-  # Count AUR packages for the guard
   local aur_count=0
   if [[ -n "$aur_pkgs" ]]; then
     aur_count="$(echo "$aur_pkgs" | grep -c '.' || true)"
@@ -79,6 +85,21 @@ set -euo pipefail
 # Generated at: ${timestamp}
 
 log() { echo "[install-packages] \$*"; }
+
+install_yay() {
+  if command -v yay &>/dev/null; then
+    log "yay already installed, skipping."
+    return
+  fi
+  log "Installing yay from AUR..."
+  sudo pacman -S --needed --noconfirm base-devel git
+  local yay_dir="/tmp/yay"
+  if [[ ! -d "\$yay_dir" ]]; then
+    git clone https://aur.archlinux.org/yay.git "\$yay_dir"
+  fi
+  (cd "\$yay_dir" && makepkg -si --noconfirm)
+  log "yay installed."
+}
 
 install_pacman_packages() {
   log "Installing pacman packages..."
@@ -117,6 +138,7 @@ AUR_EMPTY
     fi
 
     cat <<'FOOTER'
+install_yay
 install_pacman_packages
 install_aur_packages
 log "Done."
