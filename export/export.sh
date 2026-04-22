@@ -91,6 +91,19 @@ sync_pacman_db() {
   sudo pacman -Sy
 }
 
+setup_mirrors() {
+  if command -v reflector &>/dev/null; then
+    log "reflector already installed, updating mirrors..."
+  else
+    log "Installing reflector to select fast mirrors..."
+    sudo pacman -S --needed --noconfirm reflector
+  fi
+  log "Selecting fastest mirrors (this may take a moment)..."
+  sudo reflector --latest 10 --sort rate --protocol https --save /etc/pacman.d/mirrorlist
+  sudo pacman -Sy
+  log "Mirrors updated."
+}
+
 install_yay() {
   if command -v yay &>/dev/null; then
     log "yay already installed, skipping."
@@ -144,6 +157,7 @@ AUR_EMPTY
 
     cat <<'FOOTER'
 sync_pacman_db
+setup_mirrors
 install_yay
 install_pacman_packages
 install_aur_packages
