@@ -14,7 +14,7 @@ A two-phase WSL environment bootstrap system:
 The target environment is:
 - Shell: `zsh` (no oh-my-zsh, custom config)
 - Editor: `neovim`
-- Configs: stored in a dotfiles git repo (structure TBD — single vs separate repos)
+- Configs: stored in a single dotfiles git repo cloned to `~/dotfiles`
 
 ---
 
@@ -55,8 +55,8 @@ wsl-setup/
 
 **What it does:**
 - Queries `pacman` for all explicitly installed packages
-- Queries the AUR helper (e.g. `yay` or `paru`) for AUR packages
-- Writes a `manifest/packages.json` with package names, versions, and source (pacman/AUR)
+- Queries `yay` for AUR packages
+- Writes a `manifest/packages.json` with package names and source (pacman/AUR)
 - Generates `scripts/install-packages.sh` — a ready-to-run script that installs everything
 
 **Manifest format (`packages.json`):**
@@ -122,7 +122,7 @@ Configs for `zsh` and `nvim` live in a separate dotfiles git repo. The dotfiles 
 
 | ID | Name | Path | Status |
 |----|------|------|--------|
-| 001 | Export | `docs/feature_001_export/` | 🔲 To be created |
+| 001 | Export | `docs/feature_001_export/` | ✅ Created |
 | 002 | Setup | `docs/feature_002_setup/` | 🔲 To be created |
 | 003 | Dotfiles | `docs/feature_003_dotfiles/` | 🔲 To be created |
 
