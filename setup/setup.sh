@@ -90,6 +90,31 @@ link_zshrc() {
   log "Linked $dst -> $src"
 }
 
+link_zsh_config() {
+  local src="$DOTFILES_DIR/zsh/config"
+  local dst="$HOME/.config/zsh"
+
+  if [[ ! -d "$src" ]]; then
+    log "WARNING: $src not found in dotfiles, skipping zsh config link."
+    return
+  fi
+
+  mkdir -p "$HOME/.config"
+
+  if [[ -L "$dst" && "$(readlink "$dst")" == "$src" ]]; then
+    log "zsh config already linked, skipping."
+    return
+  fi
+
+  if [[ -e "$dst" ]]; then
+    log "Backing up existing $dst to $dst.bak"
+    mv "$dst" "$dst.bak"
+  fi
+
+  ln -s "$src" "$dst"
+  log "Linked $dst -> $src"
+}
+
 link_nvim_config() {
   local src="$DOTFILES_DIR/nvim"
   local dst="$HOME/.config/nvim"
@@ -150,6 +175,7 @@ main() {
   install_packages
   clone_dotfiles
   link_zshrc
+  link_zsh_config
   link_nvim_config
   set_default_shell
 
