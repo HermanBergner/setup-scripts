@@ -77,7 +77,7 @@ wsl-setup/
 **Purpose:** Bootstrap a clean WSL instance into a fully configured environment.
 
 **What it does:**
-1. Installs an AUR helper if not present (e.g. `yay`)
+1. Installs `yay` (AUR helper) if not present
 2. Runs `scripts/install-packages.sh` to install all packages from the manifest
 3. Clones the dotfiles repo
 4. Symlinks zsh config (`.zshrc`) into `$HOME`
@@ -123,7 +123,7 @@ Configs for `zsh` and `nvim` live in a separate dotfiles git repo. The dotfiles 
 | ID | Name | Path | Status |
 |----|------|------|--------|
 | 001 | Export | `docs/feature_001_export/` | ✅ Created |
-| 002 | Setup | `docs/feature_002_setup/` | 🔲 To be created |
+| 002 | Setup | `docs/feature_002_setup/` | ✅ Created |
 | 003 | Dotfiles | `docs/feature_003_dotfiles/` | 🔲 To be created |
 
 ---
