@@ -60,6 +60,34 @@ clone_dotfiles() {
   fi
 }
 
+install_zsh_plugins() {
+  local plugins_dir="$HOME/.config/zsh/plugins"
+
+  if [[ ! -d "$HOME/.config/zsh" ]]; then
+    log "WARNING: ~/.config/zsh not yet linked, skipping plugin install."
+    return
+  fi
+
+  mkdir -p "$plugins_dir"
+
+  local -A plugins=(
+    ["fzf-tab"]="https://github.com/Aloxaf/fzf-tab"
+    ["zsh-syntax-highlighting"]="https://github.com/zsh-users/zsh-syntax-highlighting"
+    ["zsh-autosuggestions"]="https://github.com/zsh-users/zsh-autosuggestions"
+  )
+
+  for name in "${!plugins[@]}"; do
+    local url="${plugins[$name]}"
+    local dst="$plugins_dir/$name"
+    if [[ -d "$dst/.git" ]]; then
+      log "zsh plugin $name already installed, skipping."
+    else
+      log "Installing zsh plugin $name..."
+      git clone --depth=1 "$url" "$dst"
+    fi
+  done
+}
+
 link_zshrc() {
   local src="$DOTFILES_DIR/zsh/.zshrc"
   local dst="$HOME/.zshrc"
@@ -168,6 +196,7 @@ main() {
   clone_dotfiles
   link_zshrc
   link_zsh_config
+  install_zsh_plugins
   link_nvim_config
   set_default_shell
 
